@@ -1,11 +1,12 @@
 package http
 
 import (
-	"../cache"
-	"../cluster"
+	"github.com/upeven/SCache/cache"
+	"github.com/upeven/SCache/cluster"
 	"net/http"
 )
 
+//服务端实现
 type Server struct {
 	cache.Cache
 	cluster.Node

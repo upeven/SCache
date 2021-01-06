@@ -1,7 +1,7 @@
 package tcp
 
 import (
-	"../cache"
+	"github.com/upeven/SCache/cache"
 	"net"
 )
 
@@ -10,6 +10,7 @@ type Server struct {
 }
 
 func (s *Server) Listen() {
+	//监听tcp端口
 	l, e := net.Listen("tcp", ":12346")
 	if e != nil {
 		panic(e)

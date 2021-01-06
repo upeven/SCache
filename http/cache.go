@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+//缓存服务
 type cacheHandler struct {
 	*Server
 }

@@ -6,12 +6,13 @@ import (
 	"log"
 	"net"
 )
-
+//结果结构体
 type result struct {
 	v []byte
 	e error
 }
 
+//为tcp实现cache接口
 func (s *Server) get(ch chan chan *result, r *bufio.Reader) {
 	c := make(chan *result)
 	ch <- c
@@ -52,6 +53,7 @@ func (s *Server) del(ch chan chan *result, r *bufio.Reader) {
 	}()
 }
 
+//响应客户端请求
 func reply(conn net.Conn, resultCh chan chan *result) {
 	defer conn.Close()
 	for {
@@ -68,6 +70,7 @@ func reply(conn net.Conn, resultCh chan chan *result) {
 	}
 }
 
+//自定义Tcp协议，服务端处理
 func (s *Server) process(conn net.Conn) {
 	r := bufio.NewReader(conn)
 	resultCh := make(chan chan *result, 5000)
