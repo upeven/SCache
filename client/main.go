@@ -1,23 +1,29 @@
 package main
 
 import (
-	"../cache-benchmark/cacheClient"
+	"github.com/upeven/SCache/cache"
+	"github.com/upeven/SCache/cluster"
+	"github.com/upeven/SCache/http"
+	"github.com/upeven/SCache/tcp"
 	"flag"
-	"fmt"
+	"log"
 )
 
 func main() {
-	server := flag.String("h", "localhost", "cache server address")
-	op := flag.String("c", "get", "command, could be get/set/del")
-	key := flag.String("k", "", "key")
-	value := flag.String("v", "", "value")
+	typ := flag.String("type", "inmemory", "cache type")
+	ttl := flag.Int("ttl", 30, "cache time to live")
+	node := flag.String("node", "127.0.0.1", "node address")
+	clus := flag.String("cluster", "", "cluster address")
 	flag.Parse()
-	client := cacheClient.New("tcp", *server)
-	cmd := &cacheClient.Cmd{*op, *key, *value, nil}
-	client.Run(cmd)
-	if cmd.Error != nil {
-		fmt.Println("error:", cmd.Error)
-	} else {
-		fmt.Println(cmd.Value)
+	log.Println("type is", *typ)
+	log.Println("ttl is", *ttl)
+	log.Println("node is", *node)
+	log.Println("cluster is", *clus)
+	c := cache.New(*typ, *ttl)
+	n, e := cluster.New(*node, *clus)
+	if e != nil {
+		panic(e)
 	}
+	go tcp.New(c, n).Listen()
+	http.New(c, n).Listen()
 }

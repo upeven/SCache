@@ -53,7 +53,7 @@ func (c *inMemoryCache) GetStat() Stat {
 	return c.Stat
 }
 
-//创建实例
+//创建一个自动扫描键值对过期时间的实例
 func newInMemoryCache(ttl int) *inMemoryCache {
 	c := &inMemoryCache{make(map[string]value), sync.RWMutex{}, Stat{}, time.Duration(ttl) * time.Second}
 	if ttl > 0 {
@@ -62,7 +62,7 @@ func newInMemoryCache(ttl int) *inMemoryCache {
 	return c
 }
 
-//设置缓存过期时间
+//删除过期缓存并释放空间
 func (c *inMemoryCache) expirer() {
 	for {
 		time.Sleep(c.ttl)

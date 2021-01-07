@@ -18,6 +18,7 @@ type tcpClient struct {
 	r *bufio.Reader
 }
 
+//发送数据
 func (c *tcpClient) sendGet(key string) {
 	klen := len(key)
 	c.Write([]byte(fmt.Sprintf("G%d %s", klen, key)))
@@ -29,11 +30,14 @@ func (c *tcpClient) sendSet(key, value string) {
 	c.Write([]byte(fmt.Sprintf("S%d %d %s%s", klen, vlen, key, value)))
 }
 
+//发送删除操作
 func (c *tcpClient) sendDel(key string) {
 	klen := len(key)
 	c.Write([]byte(fmt.Sprintf("D%d %s", klen, key)))
 }
 
+
+//读取数据
 func readLen(r *bufio.Reader) int {
 	tmp, e := r.ReadString(' ')
 	if e != nil {

@@ -13,7 +13,7 @@ type Cmd struct {
 	Value string
 	Error error
 }
-//客户端执行接口
+//客户端接口
 type Client interface {
 	Run(*Cmd)
 	PipelinedRun([]*Cmd)
