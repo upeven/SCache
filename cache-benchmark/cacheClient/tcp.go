@@ -11,8 +11,10 @@ import (
 	"strings"
 )
 
+//TCP客户端实现
 type tcpClient struct {
 	net.Conn
+	//读取流
 	r *bufio.Reader
 }
 
@@ -46,6 +48,7 @@ func readLen(r *bufio.Reader) int {
 	return l
 }
 
+//获取响应
 func (c *tcpClient) recvResponse() (string, error) {
 	vlen := readLen(c.r)
 	if vlen == 0 {
@@ -60,6 +63,7 @@ func (c *tcpClient) recvResponse() (string, error) {
 		return "", errors.New(string(err))
 	}
 	value := make([]byte, vlen)
+	//将响应写进value
 	_, e := io.ReadFull(c.r, value)
 	if e != nil {
 		return "", e
@@ -67,7 +71,14 @@ func (c *tcpClient) recvResponse() (string, error) {
 	return string(value), nil
 }
 
+//执行命令
 func (c *tcpClient) Run(cmd *Cmd) {
+	//revover panic
+	defer func(){
+		if e := recover();e != nil {
+			log.Println("recover ", e)
+		}
+	}()
 	if cmd.Name == "get" {
 		c.sendGet(cmd.Key)
 		cmd.Value, cmd.Error = c.recvResponse()
@@ -86,10 +97,12 @@ func (c *tcpClient) Run(cmd *Cmd) {
 	panic("unknown cmd name " + cmd.Name)
 }
 
+//客户端实现pipline技术
 func (c *tcpClient) PipelinedRun(cmds []*Cmd) {
 	if len(cmds) == 0 {
 		return
 	}
+	//批量发送请求
 	for _, cmd := range cmds {
 		if cmd.Name == "get" {
 			c.sendGet(cmd.Key)
@@ -101,12 +114,14 @@ func (c *tcpClient) PipelinedRun(cmds []*Cmd) {
 			c.sendDel(cmd.Key)
 		}
 	}
+	//批量读取结果
 	for _, cmd := range cmds {
 		cmd.Value, cmd.Error = c.recvResponse()
 	}
 }
 
 func newTCPClient(server string) *tcpClient {
+	//连接服务器
 	c, e := net.Dial("tcp", server+":12346")
 	if e != nil {
 		panic(e)

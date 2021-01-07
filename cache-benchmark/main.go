@@ -133,9 +133,11 @@ func operate(id, count int, ch chan *result) {
 	ch <- r
 }
 
+//声明运行环境变量
 var typ, server, operation string
 var total, valueSize, threads, keyspacelen, pipelen int
 
+//初始化命令行
 func init() {
 	flag.StringVar(&typ, "type", "redis", "cache server type")
 	flag.StringVar(&server, "h", "localhost", "cache server address")

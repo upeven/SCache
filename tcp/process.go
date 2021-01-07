@@ -54,6 +54,7 @@ func (s *Server) del(ch chan chan *result, r *bufio.Reader) {
 }
 
 //响应客户端请求
+//channel 的 channel用来保证响应的次序
 func reply(conn net.Conn, resultCh chan chan *result) {
 	defer conn.Close()
 	for {
@@ -62,6 +63,7 @@ func reply(conn net.Conn, resultCh chan chan *result) {
 			return
 		}
 		r := <-c
+		//发送响应
 		e := sendResponse(r.v, r.e, conn)
 		if e != nil {
 			log.Println("close connection due to error:", e)
@@ -73,8 +75,11 @@ func reply(conn net.Conn, resultCh chan chan *result) {
 //自定义Tcp协议，服务端处理
 func (s *Server) process(conn net.Conn) {
 	r := bufio.NewReader(conn)
+	//异步操作接收结果channel
 	resultCh := make(chan chan *result, 5000)
 	defer close(resultCh)
+	//将链接与响应建立对应关系
+	//此处是异步操作核心实现，开辟go程
 	go reply(conn, resultCh)
 	for {
 		op, e := r.ReadByte()
