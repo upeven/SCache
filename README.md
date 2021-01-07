@@ -1,10 +1,3 @@
-<<<<<<< HEAD
----
-tags: [Import-2a2a]
-title: SCache
-created: '2020-12-22T08:20:11.907Z'
-modified: '2021-01-07T11:48:23.662Z'
----
 
 # SCache
 =======
