@@ -67,6 +67,7 @@ func New(addr, cluster string) (Node, error) {
 	return &node{circle, addr}, nil
 }
 
+//chu'li
 func (n *node) ShouldProcess(key string) (string, bool) {
 	addr, _ := n.Get(key)
 	return addr, addr == n.addr
