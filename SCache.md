@@ -2,7 +2,7 @@
 tags: [Import-2a2a]
 title: SCache
 created: '2020-12-22T08:20:11.907Z'
-modified: '2021-02-16T04:15:38.859Z'
+modified: '2021-02-16T04:26:37.287Z'
 ---
 
 # SCache
@@ -12,7 +12,7 @@ modified: '2021-02-16T04:15:38.859Z'
 **NOTE**:不可用于生产环境，可以用来学习缓存的相关知识。欢迎大家fork到自己的仓库，一起完善这个项目。
 
 ## 项目架构
-![Scache架构](/img/scache)
+![Scache架构](/img/scache.png)
 ## 项目特点
 0、采用CS架构
 1、基于内存的高速缓存服务
