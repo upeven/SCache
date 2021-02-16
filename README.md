@@ -10,7 +10,7 @@
 **NOTE**:不可用于生产环境，可以用来学习缓存的相关知识。欢迎大家fork到自己的仓库，一起完善这个项目。
 
 ## 项目架构
-![Scache架构](/img/Scache.png)
+![Scache架构](/img/scache.png)
 ## 项目特点
 0、采用CS架构
 
